@@ -1,10 +1,37 @@
 #include "../include/glad/glad.h"
 #include <GLFW/glfw3.h>
 #include "../headers/shader-program.h"
+#include "../headers/rectangle.h"
 #include <iostream>
 #include <vector>
 
+void rectangleTest(){
+    Rectangle* rect = new Rectangle(0.5f, 0.5f, 0.0f, 0.0f, 0);
+
+    std::cout << "width: " << rect->w << " " << "height: " << rect->h << " " << "center x: " << rect->center[0] << " " << "center y: " << rect->center[1] << " " << "rotation (degrees): " << rect->rotation << std::endl;
+    for (int i = 0; i < 2; i++){
+        if (i == 0) std::cout << "x: ";
+        else std::cout << "y: ";
+        std::cout << "l: " << rect->l[i] << " " << "r: " << rect->r[i] << " " << "t: " << rect->t[i] << " " << "b: " << rect->b[i] << std::endl;
+    }
+
+    rect->assignVerticesForDrawing();
+
+    for (int i = 0; i < 12; i++){
+        std::cout << rect->vertices[i] << std::endl;
+    }
+}
+
 int main(){
+
+    Rectangle* rect = new Rectangle(0.5f, 0.5f, 0.0f, 0.0f, 0);
+    rect->assignVerticesForDrawing();
+    float vertices[12];
+
+    for (int i = 0; i < 12; i++){
+        vertices[i] = rect->vertices[i];
+    }
+
     if (!glfwInit()) return 1;
 
     //tells it the major.minor version we're using
@@ -38,20 +65,6 @@ int main(){
         glfwTerminate();
         return 1;
     }
-
-    //defining the triangle's corners (vertices)
-    // 0,0 refers to the middle of the screen where 1,1 refers to the top right corner and -1,-1 the bottom left
-    float vertices[] = {
-        //first triangle
-        -0.9f, 0.7f, //top
-        -1.0f, -0.5f, //left corner
-        -0.5f, -0.5f, //right corner
-
-        //second triangle
-        0.9f, 0.7f,
-        0.5f, -0.5f,
-        1.0f, -0.5f
-    };
 
     //vao stands for "vertex array object" and it remembers how vertex data is arranged and which buffers apply it
     GLuint vao;
